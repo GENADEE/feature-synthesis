@@ -41,7 +41,6 @@ if __name__ == "__main__":
 
 	@app.route("/<float:rms>/<float:sc>/<float:sr>")
 	def hello(rms,sc,sr):
-		print float(rms)
 		resp = Response(json.dumps(model.predict(np.transpose(np.array([[float(rms)],[float(sc)],[float(sr)]])))[0].tolist()))
 		resp.headers['Access-Control-Allow-Origin'] = '*'
 		return resp

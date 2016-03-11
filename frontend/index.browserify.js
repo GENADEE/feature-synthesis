@@ -43,7 +43,7 @@
     window.s = s;
 
     document.addEventListener('keydown',function(e){
-      s.setF(keymap[e.keyCode]);
+      s.setF(keymap[e.keyCode],ctx.currentTime);
       gain.gain.exponentialRampToValueAtTime(1,ctx.currentTime+0.0005);
     });
     document.addEventListener('keyup',function(){
@@ -317,13 +317,13 @@ function getValue(start, end, fromTime, toTime, at){
     }
   };
 
-  Synth.prototype.setF = function(f){
-    this.osc1.frequency.value = f;
-    this.osc2.frequency.value = f;
-    this.osc3.frequency.value = f;
-    this.osc4.frequency.value = f;
-    this.osc5.frequency.value = f;
-    this.osc6.frequency.value = f;
+  Synth.prototype.setF = function(f, startTime){
+    this.osc1.frequency.setValueAtTime(f, startTime);
+    this.osc2.frequency.setValueAtTime(f, startTime);
+    this.osc3.frequency.setValueAtTime(f, startTime);
+    this.osc4.frequency.setValueAtTime(f, startTime);
+    this.osc5.frequency.setValueAtTime(f, startTime);
+    this.osc6.frequency.setValueAtTime(f, startTime);
   };
 
   module.exports = Synth;

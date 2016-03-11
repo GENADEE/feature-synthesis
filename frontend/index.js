@@ -42,7 +42,7 @@
     window.s = s;
 
     document.addEventListener('keydown',function(e){
-      s.setF(keymap[e.keyCode]);
+      s.setF(keymap[e.keyCode],ctx.currentTime);
       gain.gain.exponentialRampToValueAtTime(1,ctx.currentTime+0.0005);
     });
     document.addEventListener('keyup',function(){
