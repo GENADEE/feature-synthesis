@@ -54,7 +54,7 @@
     g5.connect(f1);
     g6.connect(f1);
     f1.connect(destination);
-    this.scales = [1,1,1,1,1,1,10,22050];
+    this.scales = [1,2048,1,1,1,1,10,22050];
   };
 
   Synth.prototype.set = function(vals){

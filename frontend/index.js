@@ -21,11 +21,42 @@
   var mtof = function(m){
      return Math.pow(2,(m-69)/12)*440;
   };
+  var valuesOf = function(a){
+    let vals = [];
+    for(let b in a){
+      vals.push(a[b]);
+    }
+    return vals;
+  };
   window.play = function(){
     let ctx = new AudioContext();
     let gain = ctx.createGain();
     gain.connect(ctx.destination);
     gain.gain.value = 0;
+
+    let m = Meyda.createMeydaAnalyzer({
+      "audioContext":ctx,
+      "source":gain,
+      "bufferSize": 512
+    });
+
+    var sliders = document.querySelectorAll('#sliderDisplay');
+
+    function step(timestamp) {
+      let features = valuesOf(m.get(['rms', 'spectralCentroid', 'spectralFlatness']));
+      if(features && gain.gain.value > 0.00001){
+        for(let i = 0; i < 3; i ++){
+          sliders[i].value = features[i]*(i==1?1/256:1);
+        }
+      }
+      else{
+        for(let i = 0; i < 3; i ++){
+          sliders[i].value = 0;
+        }
+      }
+      window.requestAnimationFrame(step);
+    }
+    window.requestAnimationFrame(step);
 
     var keymap = {
       '65':mtof(60-12),
@@ -78,7 +109,7 @@
       s.set(randnums);
       var success = function(renderedBuffer) {
         var features = Meyda.extract(['rms','spectralCentroid','spectralFlatness'],renderedBuffer.getChannelData(0));
-        var sc = features["spectralCentroid"]/22050;
+        var sc = features["spectralCentroid"]/2048;
         var sr = features["spectralFlatness"];
         data.push({in:randnums,out:[features['rms'],sc,sr]});
       };
@@ -86,4 +117,9 @@
     }
     return data;
   };
+  document.getElementById('playButton').addEventListener('click',play);
+  document.getElementById('dataButton').addEventListener('click',function(){
+    getData();
+    console.log("100 data are in the `data` object. Hint: `copy` is a function in chrome's console.");
+  });
 })();
